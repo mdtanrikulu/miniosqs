@@ -1,16 +1,16 @@
 package main
 
 import (
-    "net/http"
-    "github.com/justinas/alice"
+	"net/http"
+
+	"github.com/justinas/alice"
 )
 
 func (app *application) routes() http.Handler {
-    standardMiddleware := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
+	standardMiddleware := alice.New(app.recoverPanic, app.logRequest, secureHeaders)
 
-    mux := http.NewServeMux()
-    mux.HandleFunc("/", app.notifySqs)
-    mux.HandleFunc("/bucket/setup", app.setupMinioBucket)
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", app.notifySqs)
 
-    return standardMiddleware.Then(mux)
+	return standardMiddleware.Then(mux)
 }
